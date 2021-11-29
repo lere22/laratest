@@ -11,6 +11,6 @@
     <h1>Hello About!</h1>
     <p>{{ $name; }}</p>
     <p><?= $email; ?></p>
-    <img src="{{ asset('images/gambar.jpg') }}" alt="gambar" width="150px">
+    <img src="images/{{ $image; }}" alt="gambar" width="150px">
 </body>
 </html>
