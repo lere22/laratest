@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,53 +30,7 @@ Route::get('/about', function () {
     ]);
 });
 
-Route::get('/blog', function () {
-    $blog_post = [
-        [
-            "post-title" => "Judul Post Pertama",
-            "slug" => "judul-post-pertama",
-            "post-author" => "Bambang",
-            "post-content" => "Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam ullam minus amet blanditiis dolorem reiciendis corporis similique sint atque autem distinctio temporibus eligendi officia magni consectetur, quam aliquid facilis est."
-        ],
-        [
-            "post-title" => "Judul Post Kedua",
-            "slug" => "judul-post-kedua",
-            "post-author" => "Susilo",
-            "post-content" => "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet veniam sint fugit quaerat hic? A minus suscipit blanditiis aperiam ipsum exercitationem omnis, id cum obcaecati ratione nulla unde. Neque, consequuntur?"
-        ]
-    ];
-
-    return view('posts', [
-        "title" => "Blog",
-        "posts" => $blog_post
-    ]);
-});
+Route::get('/blog', [PostController::class, 'index']);
 
 // Single Post
-Route::get('/posts/{slug}', function ($slug) {
-    $blog_post = [
-        [
-            "post-title" => "Judul Post Pertama",
-            "slug" => "judul-post-pertama",
-            "post-author" => "Bambang",
-            "post-content" => "Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam ullam minus amet blanditiis dolorem reiciendis corporis similique sint atque autem distinctio temporibus eligendi officia magni consectetur, quam aliquid facilis est."
-        ],
-        [
-            "post-title" => "Judul Post Kedua",
-            "slug" => "judul-post-kedua",
-            "post-author" => "Susilo",
-            "post-content" => "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet veniam sint fugit quaerat hic? A minus suscipit blanditiis aperiam ipsum exercitationem omnis, id cum obcaecati ratione nulla unde. Neque, consequuntur?"
-        ]
-    ];
-
-    $single_post = [];
-    foreach($blog_post as $post) {
-        if ($post['slug'] === $slug) {
-            $single_post = $post;
-        }
-    }
-    return view('post', [
-        "title" => "Single Post",
-        "post" => $single_post
-    ]);
-});
+Route::get('/posts/{slug}', [PostController::class, 'show']);
