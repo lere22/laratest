@@ -22,10 +22,34 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="/login" class="nav-link {{ $active == 'login' ? 'active' : '' }}"><i
-                                class="bi bi-box-arrow-in-right"></i> Sign in</a>
-                    </li>
+                    @auth
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Hello, {{ auth()->user()->name }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/dashboard"><i
+                                            class="bi bi-layout-text-window-reverse"></i> My
+                                        Dashboard</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <form action="/logout" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right"></i>
+                                            Logout</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a href="/login" class="nav-link {{ $active == 'login' ? 'active' : '' }}"><i
+                                    class="bi bi-box-arrow-in-right"></i> Sign in</a>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </div>
