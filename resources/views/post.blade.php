@@ -8,8 +8,15 @@
                 <p>By: <a href="/posts?author={{ $post->author->username }}">{{ $post->author->name }}</a> | <a
                         href="/posts?category={{ $post->category->slug }}">{{ $post->category->name }}</a></p>
 
-                <img src="https://source.unsplash.com/random/1200x400?{{ $post->category->name }}" class="img-fluid"
-                    alt="{{ $post->category->name }}">
+                @if ($post->image)
+                    <div style="max-height: 350px; overflow:hidden;">
+                        <img src="{{ asset('storage/' . $post->image) }}" class="img-fluid"
+                            alt="{{ $post->category->name }}">
+                    </div>
+                @else
+                    <img src="https://source.unsplash.com/random/1200x400?{{ $post->category->name }}"
+                        class="img-fluid" alt="{{ $post->category->name }}">
+                @endif
 
                 <article class="my-3 fs-6">
                     {!! $post->body !!}
