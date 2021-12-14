@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use \Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardPostController extends Controller
 {
@@ -56,6 +57,7 @@ class DashboardPostController extends Controller
             'body' => 'required'
         ]);
 
+        // cek input image dan masukin ke dalam storage
         if ($request->file('image')) {
             $data['image'] = $request->file('image')->store('post.images');
         }
@@ -109,6 +111,7 @@ class DashboardPostController extends Controller
         $rules = [
             'title' => 'required|max:255',
             'category_id' => 'required',
+            'image' => 'image|file|max:1024',
             'body' => 'required'
         ];
 
@@ -118,6 +121,16 @@ class DashboardPostController extends Controller
         }
 
         $data = $request->validate($rules);
+
+        // update image
+        if ($request->file('image')) {
+            // hapus gambar lama di storage
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+            // masukin gambar baru ke storage
+            $data['image'] = $request->file('image')->store('post.images');
+        }
 
         $data['user_id'] = auth()->user()->id;
         $data['excerpt'] = Str::limit(strip_tags($request->body), 200);
@@ -136,6 +149,10 @@ class DashboardPostController extends Controller
     public function destroy(Post $post)
     {
         // proses delete data
+        // hapus gambar pada storage
+        if ($post->image) {
+            Storage::delete($post->image);
+        }
         Post::destroy($post->id);
         return redirect('/dashboard/posts')->with('sukses', 'Post telah dihapus!');
     }
